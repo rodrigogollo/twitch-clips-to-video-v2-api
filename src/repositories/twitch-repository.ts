@@ -62,7 +62,16 @@ export async function getClipsByBroadcaster(broadcaster_id, first, started_at, e
   return res.data;
 }
 
-export async function getClipsByGame(game_id, first, started_at, ended_at, cursor = null, results = []) {
+type Filter = {
+  game_id: string,
+  first: number,
+  started_at: string,
+  ended_at: string,
+  cursor: string | null,
+  results: string[]
+}
+
+export async function getClipsByGame(game_id: string, first: number, started_at: string, ended_at: string, cursor = null, results: string[] = []) {
   const headers = await setHeaders()
   let params = {
     game_id,
