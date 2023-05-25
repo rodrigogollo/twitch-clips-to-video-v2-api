@@ -5,7 +5,6 @@ import { getTwitchToken } from '../config/twitch'
 
 dotenv.config({ path: path.resolve(__dirname, '../../.env') })
 
-
 async function setHeaders() {
   const token = await getTwitchToken()
   return {
@@ -34,6 +33,22 @@ export async function getGameById(id) {
     },
   });
   return res.data;
+}
+
+export async function getAllGamesByListId(listGameIds) {
+  let uniqueGameIds = [...new Set(listGameIds)];
+
+  let games = []
+  for (const game of uniqueGameIds) {
+    const gameObj = await getGameById(game)
+    games.push(gameObj.data[0])
+  }
+
+  const resultList = listGameIds.map(gameId => {
+    return games.filter(game => game.id === gameId)
+  })
+
+  return resultList.flat()
 }
 
 export async function getUserByLogin(login) {
