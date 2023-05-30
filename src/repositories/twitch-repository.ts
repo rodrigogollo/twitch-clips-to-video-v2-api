@@ -41,6 +41,8 @@ export async function getAllGamesByListId(listGameIds) {
   let games = []
   for (const game of uniqueGameIds) {
     const gameObj = await getGameById(game)
+    const box_art = gameObj.data[0].box_art_url.replace('{width}', '300').replace('{height}', '300')
+    gameObj.data[0].box_art_url = box_art
     games.push(gameObj.data[0])
   }
 
