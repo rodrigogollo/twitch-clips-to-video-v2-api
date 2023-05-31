@@ -8,14 +8,16 @@ const port = 3000;
 app.use(cors())
 
 app.get('/clips', async (req, res) => {
-  const clips = await getClipsByBroadcaster(23936415, 30, '2023-05-02T00:00:00Z', new Date())
+  const clips = await getClipsByBroadcaster(71092938, 30, '2023-05-02T00:00:00Z', new Date())
   const gameListIds = clips.data.map(clip => clip.game_id)
   const games = await getAllGamesByListId(gameListIds)
 
   clips.data.map(clip => {
     clip.game = games.find(game => game.id === clip.game_id)
     const viewK = formatter.format(clip.view_count)
+    const durationTime = new Date(clip.duration * 1000).toISOString().substring(15, 19)
     clip.view_count = viewK
+    clip.duration = durationTime
     return clip
   })
   res.send(clips);
@@ -24,7 +26,7 @@ app.get('/clips', async (req, res) => {
 app.get('/token', async (req, res) => {
   const token = await getTwitchToken()
   console.log('token', token)
-  res.send(token);
+  res.send(JSON.stringify(token));
 })
 
 app.listen(port, () => {
