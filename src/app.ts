@@ -7,6 +7,10 @@ const app = express();
 const port = 3000;
 app.use(cors())
 
+app.get('/', (req, res) => {
+  res.send('hello world')
+})
+
 app.get('/clips', async (req, res) => {
   const clips = await getClipsByBroadcaster(71092938, 30, '2023-05-02T00:00:00Z', new Date())
   const gameListIds = clips.data.map(clip => clip.game_id)
