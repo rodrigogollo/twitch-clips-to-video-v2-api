@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc",
-    "start": "npm run build && node dist/app.js",
+    "start": "nodemon dist/app.js",
     "start:dev": "ts-node-dev src/app.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint:fix": "eslint --fix ./*.js"
