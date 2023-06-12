@@ -8,7 +8,7 @@ const port = 3000;
 app.use(cors())
 
 app.get('/', (req, res) => {
-  res.send('hello world')
+  return res.send('hello world')
 })
 
 app.get('/clips', async (req, res) => {
