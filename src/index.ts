@@ -11,6 +11,11 @@ app.get('/', (req, res) => {
   return res.send('hello world')
 })
 
+
+app.get('/ping', (req, res) => {
+  return res.send('pong 🏓')
+})
+
 // app.get('/clips', async (req, res) => {
 //   const clips = await getClipsByBroadcaster(71092938, 30, '2023-05-02T00:00:00Z', new Date())
 //   const gameListIds = clips.data.map(clip => clip.game_id)
