@@ -1,6 +1,6 @@
-import express from 'express';
+import express, { Request } from 'express';
 import cors from 'cors';
-import { getAllGamesByListId, getClipsByBroadcaster } from './repositories/twitch-repository'
+import { getAllGamesByListId, getClipsByGame, getGameByName, getClipsByBroadcaster } from './repositories/twitch-repository'
 import { getTwitchToken } from './config/twitch'
 
 const app = express();
@@ -15,8 +15,27 @@ app.get('/ping', (req, res) => {
   return res.send('pong 🏓')
 })
 
-app.get('/clips', async (req, res) => {
-  const clips = await getClipsByBroadcaster(71092938, 30, '2023-05-02T00:00:00Z', new Date())
+interface RequestParams {
+  game: string
+}
+
+interface RequestQuery {
+  size: number
+}
+
+app.get('/clips/game/:game', async (req: Request<RequestParams, RequestQuery>, res) => {
+  const game = req.params.game
+  const size = Number(req.query.size) || 20
+
+  const gameArray = await getGameByName(game)
+  const gameId = gameArray.data[0].id
+
+  const today = new Date()
+  const yesterday = new Date()
+  yesterday.setMonth(today.getMonth() - 1)
+
+  const clips = await getClipsByGame(gameId, size, yesterday.toISOString(), today.toISOString())
+  // const clips = await getClipsByBroadcaster(71092938, size, '2023-05-02T00:00:00Z', new Date())
   const gameListIds = clips.data.map(clip => clip.game_id)
   const games = await getAllGamesByListId(gameListIds)
 
